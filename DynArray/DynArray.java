@@ -38,6 +38,10 @@ public abstract class DynArray<T> {
     // постусловие: массив очищен
     public abstract void clear();
 
+    // предусловие: индекс должен находиться в допустимом диапазоне 0 <= i < size()
+    // постусловие: объект под i-м индексом заменен на value
+    public abstract void replace(T value, int i);
+
     // постусловия: буфер должен изменить свой размер;
     // данные должны быть верно перенесены из "старого" массива в "новый"
     // public abstract void makeArray(int newCapacity);
@@ -50,6 +54,7 @@ public abstract class DynArray<T> {
     public abstract int get_remove_status();
     public abstract int get_insert_status();
     public abstract int get_getItem_status();
+    public abstract int get_replace_status();
 
 }
 
@@ -69,12 +74,17 @@ public class DynArray<T> {
     public static final int GETITEM_OK = 1; // запрос getItem(i) отработал нормально
     public static final int GETITEM_ERR = 2; // неверное значение для i
 
+    public static final int REPLACE_NIL = 0; // replace(val, i) ещё не вызывалась
+    public static final int REPLACE_OK = 1; // команда replace(val, i) отработал нормально
+    public static final int REPLACE_ERR = 2; // неверное значение для i
+
     private int capacity;
     private int count;
     private T[] arr;
     private int insert_status;
     private int remove_status;
     private int getItem_status;
+    private int replace_status;
 
     public DynArray(){
         clear();
@@ -102,6 +112,16 @@ public class DynArray<T> {
         }
 
         return value;
+    }
+
+    public void replace(T value, int i){
+        if (i >= 0 && i < size()){
+            arr[i] = value;
+            replace_status = REPLACE_OK;
+        }
+        else{
+            replace_status = REPLACE_ERR;
+        }
     }
 
     public void insert(T value, int i) {
@@ -147,6 +167,7 @@ public class DynArray<T> {
         insert_status = INSERT_NIL;
         remove_status = REMOVE_NIL;
         getItem_status = GETITEM_NIL;
+        replace_status = REPLACE_NIL;
 
         capacity = 16;
         count = 0;
@@ -182,5 +203,9 @@ public class DynArray<T> {
 
     public int get_getItem_status() {
         return getItem_status;
+    }
+
+    public int get_replace_status(){
+        return replace_status;
     }
 }
