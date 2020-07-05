@@ -293,8 +293,8 @@ public abstract class ADT_Dequeue<T> extends ADT_Queue<T> {
 }
 
 
-// реализация ADT Queue в иерархии
-public class Queue<T> {
+// реализация ADT Base_Queue в иерархии
+public class Base_Queue<T> {
     public static final int REMOVEFIRST_NIL = 0; // команда removeFirst() не вызывалась
     public static final int REMOVEFIRST_OK = 1; // последняя команда removeFirst() отработала успешно
     public static final int REMOVEFIRST_ERR = 3; // список пуст
@@ -304,7 +304,7 @@ public class Queue<T> {
     public static final int PEEKFIRST_ERR = 3; // список пуст
 
 
-    public Queue(){
+    public Base_Queue(){
         clear();
     }
 
@@ -398,8 +398,17 @@ public class Queue<T> {
 
 }
 
-// реализация ADT Dequeue в иерархии на основе класса Queue:
-public class Dequeue2<T> extends Queue<T>{
+// реализация ADT Queue в иерархии на основе класса Base_Queue :
+public class Queue<T> extends Base_Queue<T>{
+
+    public class Queue(){
+        super.clear();
+    }
+
+}
+
+// реализация ADT Dequeue в иерархии на основе класса Base_Queue:
+public class Dequeue2<T> extends Base_Queue<T>{
 
     public static final int REMOVELAST_NIL = 0; // команда removeLast() не вызывалась
     public static final int REMOVELAST_OK = 1; // последняя команда removeLast() отработала успешно
