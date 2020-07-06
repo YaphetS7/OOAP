@@ -10,7 +10,7 @@ public abstract class ADT_HashTable {
     // ------------------
 
     public abstract boolean find(String value); // true - объект найден в таблице
-
+    // в качестве альтернативы - find мог бы возвращать hash от входного значения, либо -1
 
     // ------------------
     // команды:
