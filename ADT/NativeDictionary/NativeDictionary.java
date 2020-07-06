@@ -12,6 +12,7 @@ public abstract class ADT_NativeDictionary<T> {
 
     public abstract boolean isKey(String key); // true - если key является ключом
 
+    // предусловие: ключ имеется в словаре
     public abstract T get(String key);
 
 
@@ -22,7 +23,6 @@ public abstract class ADT_NativeDictionary<T> {
 
     public abstract void clear();
 
-    // предусловие: в словаре есть место для value
     // постусловие: новый объект добавлен в словарь
     public abstract void put(String key, T value);
 
@@ -36,7 +36,7 @@ public abstract class ADT_NativeDictionary<T> {
     // ------------------
 
     public abstract int get_remove_status();
-    public abstract int get_put_status();
+    public abstract int get_get_status();
 }
 
 // реализация ADT NativeDictionary:
@@ -46,11 +46,11 @@ public class NativeDictionary<T>{
     public static final int REMOVE_OK = 1;
     public static final int REMOVE_ERR = 2;
 
-    public static final int PUT_NIL = 0;
-    public static final int PUT_OK = 1;
-    public static final int PUT_ERR = 2;
+    public static final int GET_NIL = 0;
+    public static final int GET_OK = 1;
+    public static final int GET_ERR = 2;
 
-    private int put_status;
+    private int get_status;
     private int remove_status;
 
     private String[] keys;
@@ -97,17 +97,24 @@ public class NativeDictionary<T>{
     }
 
     public T get(String key) {
+
         T res = null;
+
         int i = seekSlot(key);
         if (i >= 0){
             res = values[i];
+
+            get_status = GET_OK;
+        }
+        else{
+            get_status = GET_ERR;
         }
 
         return res;
     }
 
     public void clear() {
-        put_status = PUT_NIL;
+        get_status = GET_NIL;
         remove_status = REMOVE_NIL;
 
         keys = new String[capacity];
@@ -121,11 +128,6 @@ public class NativeDictionary<T>{
         if(i >= 0){
             keys[i] = key;
             values[i] = value;
-
-            put_status = PUT_OK;
-        }
-        else{
-            put_status = PUT_ERR;
         }
     }
 
@@ -147,7 +149,7 @@ public class NativeDictionary<T>{
         return remove_status;
     }
 
-    public int get_put_status() {
-        return put_status;
+    public int get_get_status() {
+        return get_status;
     }
 }
