@@ -9,12 +9,7 @@ public abstract class ADT_HashTable {
     // запросы:
     // ------------------
 
-
-    public abstract int hashFun(String value);
-
-    public abstract int seekSlot(String value);
-
-    public abstract int find(String value);
+    public abstract boolean find(String value); // true - объект найден в таблице
 
 
     // ------------------
@@ -24,6 +19,9 @@ public abstract class ADT_HashTable {
     // предусловие: место в таблице для нового значения должно найтись
     // постусловие: в таблицу добавлено новое значение
     public abstract void put(String value);
+
+    // постусловие: в таблице не должно быть элемента value
+    public abstract void remove(String value);
 
     public abstract void clear();
 
@@ -52,7 +50,7 @@ public class HashTable {
         clear();
     }
 
-    public int hashFun(String value) {
+    private int hashFun(String value) {
         int sum = 0;
         for (int i = 0; i < value.length(); i++){
             sum += value.charAt(i);
@@ -60,7 +58,7 @@ public class HashTable {
         return sum % capacity;
     }
 
-    public int seekSlot(String value) {
+    private int seekSlot(String value) {
         int i = hashFun(value);
 
         if (arr[i] != null){
@@ -77,18 +75,14 @@ public class HashTable {
         return i;
     }
 
-    public int find(String value) {
+    public boolean find(String value) {
         int i = hashFun(value);
 
         while(i < capacity && value != arr[i]){
             i += step;
         }
 
-        if (i > capacity){
-            i = -1;
-        }
-
-        return i;
+        return (i < capacity);
     }
 
 
@@ -100,6 +94,14 @@ public class HashTable {
         }
         else{
             put_status = PUT_ERR0;
+        }
+    }
+
+    public void remove(String value){
+        int i = seekSlot(value);
+
+        if (i >= 0){
+            arr[i] = null;
         }
     }
 
